@@ -13,6 +13,30 @@ DEFCONFIG="vendor/surya-perf_defconfig"
 
 export PATH="$TC_DIR/bin:$PATH"
 
+if ! [ -d "$HOME/tc/aosp-clang" ]; then
+echo "Aosp clang not found! Cloning..."
+if ! git clone -q https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r437112.git --depth=1 --single-branch ~/tc/aosp-clang; then
+echo "Cloning failed! Aborting..."
+exit 1
+fi
+fi
+
+if ! [ -d "$HOME/tc/aarch64-linux-android-4.9" ]; then
+echo "aarch64-linux-android-4.9 not found! Cloning..."
+if ! git clone -q https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9.git --depth=1 --single-branch ~/tc/aarch64-linux-android-4.9; then
+echo "Cloning failed! Aborting..."
+exit 1
+fi
+fi
+
+if ! [ -d "$HOME/tc/arm-linux-androideabi-4.9" ]; then
+echo "arm-linux-androideabi-4.9 not found! Cloning..."
+if ! git clone -q https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9.git --depth=1 --single-branch ~/tc/arm-linux-androideabi-4.9; then
+echo "Cloning failed! Aborting..."
+exit 1
+fi
+fi
+
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
 	make O=out ARCH=arm64 $DEFCONFIG savedefconfig
 	cp out/defconfig arch/arm64/configs/$DEFCONFIG
